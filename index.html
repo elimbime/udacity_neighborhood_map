@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Neighborhood App</title>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+            <h1 data-bind="text: apppName"> </h1>
+    </div>
+    <div id="map">
+
+    </div>
+</body>
+</script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+    <script type="text/javascript" src="script/site.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
+    defer></script>
+</html>
