@@ -1,17 +1,30 @@
 .wrapper {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-gap: 10px;
-    grid-auto-rows: 50px minmax(100px, auto);
-  }
-  .one {
-    grid-column: 1;
-  }
-  .two { 
-    grid-column: 1;
-    grid-row: 2/5;
-  }
-  .three {
-    grid-column: 2;
-    grid-row: 2/5;
-  }
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 10px;
+  grid-auto-rows: 50px minmax(100px, auto);
+}
+
+.one {
+  grid-column: 1/-1;
+}
+
+.two {
+  grid-column: 1;
+  grid-row: 2/5;
+}
+
+.three {
+  grid-column: 2;
+  grid-row: 2/5;
+}
+
+.title{
+  text-align: center; 
+  vertical-align: middle; 
+}
+
+.filter {
+  background-color: grey; 
+  color: white;
+}

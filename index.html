@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>My Neighborhood App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
     <link rel="stylesheet" href="css/site.css">
     <style type="text/css">
         html,
@@ -22,19 +24,64 @@
 </head>
 
 <body class="wrapper">
-    <div class="one">
-            <h1 data-bind="text: apppName"> </h1>
+    <div class="one title">
+        <h1 data-bind="text: apppName"> </h1>
     </div>
-    <div id="navigation" class="two"> 
+    <div id="navigation" class="two filter">
 
+        <div class="columns">
+            <div class="column">
+                <input class="input" type="text" placeholder="Put your filtler here">
+            </div>
+            <div class="column">
+                <button class="button">Filter</button>
+            </div>
+        </div>
+        <!-- <div class="columns">
+            <div class="column">
+                <div class="field has-addons">
+                    <p class="control">
+                        <input class="input" type="text" placeholder="Enter your filter">
+                    </p>
+                    <p class="control">
+                        <a class="button is-static">
+                            Filter
+                    </p>
+                </div>
+            </div>
+        </div> -->
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label is-medium">Medium input</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input class="input is-small" type="email" placeholder="Email">
+                        <span class="icon is-small is-left">
+                            <i class="fa fa-envelope"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i class="fa fa-check"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <ul data-bind="foreach:markers">
+                    <li data-bind="text: title"></li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div id="map" class="three">
 
     </div>
 </body>
 </script>
-    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
-    <script type="text/javascript" src="script/site.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+<script type="text/javascript" src="script/site.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
     defer></script>
+
 </html>

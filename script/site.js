@@ -37,10 +37,6 @@ function initMap() {
             title: curMarker.title,
             map: map
         });
-        // //add event listener to the map
-        // marker.addListener('click', function () {
-        //     infowindow.open(map, marker);
-        // });
     }
     var infowindow = new google.maps.InfoWindow({
         content: '<h1>Some stylish comment</h1>'
