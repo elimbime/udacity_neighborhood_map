@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
         crossorigin="anonymous">
     <link rel="stylesheet" href="css/site.css">
+    <script src="main.js"></script>
     <style type="text/css">
         html,
         body {
@@ -29,14 +30,14 @@
         <div class="col-2">
             <div class="d-flex flex-column">
                 <div class="p-2">
-                    <h2 data-bind="text: apppName"> </h2>
+                    <h2 data-bind="text: appName"></h2>
                 </div>
                 <div class="p-2">
-                    <input class="input" type="text" placeholder="Put your filtler here">
+                    <input class="input" type="text" placeholder="Put your filtler here" data-bind="textInput: filter">
                 </div>
                 <div class="p-2">
-                    <ul data-bind="foreach:markers">
-                        <li data-bind="text: title"></li>
+                    <ul data-bind="foreach:computedfiltered">
+                        <li data-bind="text: title,click:$parent.showMarker"></li>
                     </ul>
                 </div>
             </div>
@@ -48,14 +49,40 @@
     </div>
 </body>
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
+    defer></script>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
     crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
     crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
-<script type="text/javascript" src="script/site.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
-    defer></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/template" id="repeating-form-section-template">
+    <div class="repeating-form-section">
+        <h2 data-bind="text: testValue">testvalue</h2>
+    </div>
+</script>
+<script type="text/template" id="repeating-yelp-element">
+    <div class="repeating-form-section">
+            <div data-bind="if: loading">
+                <p>Spinner</p>
+            </div>
+            <div data-bind="ifnot: displayMessage">
+                    <h1>name</h1>
+                    <img src="https://s3-media3.fl.yelpcdn.com/bphoto/7wfpjg4sEvu6xifxcPsBXg/o.jpg" class="img-responsive rounded float-left" alt="" style="
+                      height:60px;">
+                    <div class="d-flex flex-column">
+                      <p class="">is_closed</p>
+                      <p class="">display</p>
+                      <p class="">review_count</p>
+                      <p class="">categories</p>
+                      <p class="">ratings</p>
+                      <p class="">prices </p>
+                    </div>
+                  </div>  
+            </div>     
+</script>
+
 </html>

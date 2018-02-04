@@ -10,8 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/googlemaps": "^3.30.4",
-    "knockout": "^3.4.2",
-    "requirejs": "^2.3.5"
+    "@types/knockout": "^3.4.47"
   },
   "devDependencies": {
     "typescript": "^2.6.2"
