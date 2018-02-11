@@ -37,7 +37,7 @@
                 </div>
                 <div class="p-2">
                     <ul data-bind="foreach:computedfiltered">
-                        <li data-bind="text: title,click:$parent.showMarker"></li>
+                        <li data-bind="text: title,click:$parent.showMarker,model"></li>
                     </ul>
                 </div>
             </div>
@@ -48,26 +48,28 @@
         </div>
     </div>
 </body>
-</script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKkJ5Y-LFWxYbxCTaWyKNRnNzDK5vpHbA&callback=initMap" async
     defer></script>
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous">
+    </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
     crossorigin="anonymous"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="text/template" id="repeating-form-section-template">
     <div class="repeating-form-section">
-        <h2 data-bind="text: testValue">testvalue</h2>
+        <h2 data-bind="text: testValue"></h2>
     </div>
 </script>
 <script type="text/template" id="repeating-yelp-element">
     <div class="repeating-form-section">
             <div data-bind="if: loading">
-                <p>Spinner</p>
+                <i class="fas fa-spinner fa-spin"></i>
             </div>
             <div data-bind="ifnot: displayMessage">
                     <h1>name</h1>

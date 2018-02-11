@@ -4,6 +4,7 @@
   "description": "Udacity FEND project",
   "main": "index.html",
   "scripts": {
+    "dev": "lite-server", 
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +14,7 @@
     "@types/knockout": "^3.4.47"
   },
   "devDependencies": {
+    "lite-server": "^2.3.0",
     "typescript": "^2.6.2"
   }
 }

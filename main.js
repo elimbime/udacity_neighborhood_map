@@ -46,12 +46,14 @@ function initMap() {
 };
 
 function initMyNeighborhoodModel(appName, markers) {
-    this.appName = ko.observable(appName),
-        this.markers = ko.observableArray(markers),
-        this.filter = ko.observable(""),
-        this.computedfiltered = ko.pureComputed(function () {
+    var self = this;
+    self.appName = ko.observable(appName),
+        self.markers = ko.observableArray(markers),
+        self.filter = ko.observable(""),
+        self.testValue = ko.observable("Ma valeur de test"),
+        self.computedfiltered = ko.pureComputed(function () {
             let elts = [];
-            if (this.filter().length > 0) {
+            if (self.filter().length > 0) {
                 elts = this.markers().filter(mk => mk.title.includes(this.filter()))
             }
             else {
@@ -59,27 +61,39 @@ function initMyNeighborhoodModel(appName, markers) {
             }
             return elts;
         }, this),
-        this.loading = ko.observable(false),
-        this.yelpInfo = ko.observable([]),
-        this.showMarker = function (currentMarker) {
+        self.loading = ko.observable(false),
+        self.yelpInfo = ko.observable([]),
+        self.showMarker = function (currentMarker, currentModel) {
+            self.loading = true;
+            getWikipediaInfo(currentMarker, self.loading); 
+            let imagePath = buildImagePath(currentMarker);
+            let content = builContentInfo(imagePath, currentMarker);
+
             let infowindow = new google.maps.InfoWindow({
-                content: $("#repeating-form-section-template").html(),
-                animation: google.maps.Animation.BOUNCE,
+                content: content
+                // content: $("#repeating-form-section-template").html(),
             });
             infowindow.open(map, currentMarker.marker);
-        },
-        this.loadYelpInfo = function (currentMarker) {
-
         }
 };
 
-function initMakerInfoModel() {
-    this.loading = ko.observable(true),
-        this.testValue = ko.observable('mon test')
-    this.yelpInfo = ko.observableArray([])
-};
+function buildImagePath(marker) {
+    return 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=' + marker.position.lat + ',' + marker.position.lng + '&heading=151.78&pitch=-0.76&key=AIzaSyBMI1nd1IF3Taf08B116eG3nHyBMpir2hM'
+}
 
-function getFlickrInfo(marker) {
+async function builContentInfo(imagePath, currentMarker) {
+    let content = '<div>';
+    content = content.concat('<h5>' + currentMarker.title + '</h5>');
+    content = content.concat('<img src="' + imagePath + '" class="img-responsive rounded" alt="" style="height:60px;">');
+    content = content.concat('<h6>New-York Times Info</h6>');
+    content = content.concat('</br>');
+    content = content.concat('<h6>Wikipedia Info</h6>');
+    content = content.concat('</br>');
+    content = content.concat('</div>');
+    return content;
+}
+
+async function getFlickrInfo(marker) {
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -90,14 +104,19 @@ function getFlickrInfo(marker) {
             "Cache-Control": "no-cache",
             "Postman-Token": "25236b9b-0952-15d4-c51d-77e003546b82"
         }
-    }; 
-    $.ajax(settings).done(function (response) {
+    };
+    $.ajax({
+        type: 'GET',
+        url: 'https://api.yelp.com/v3/businesses/search?latitude=48.862592&longitude=2.3512000000000626&radius=600',
+        success: callback
+    }).done(function (response) {
         console.log(response);
     });
+
+    $.ajax(settings)
 };
 
-
-function getYelpInfo(marker) {
+function getYelpInfo(marker, loading) {
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -109,13 +128,82 @@ function getYelpInfo(marker) {
             "Postman-Token": "175212d8-5274-208c-5872-d8bc6fbfb668"
         }
     };
-    $.ajax(settings).done(function (response) {
-        console.log(response);
-    }).fail(function () {
-        alert("error");
-    }
-        );
+    $.ajax(settings)
+        .done(function (response) { console.log(response); })
+        .fail(function () { alert("error"); })
+        .always(function () { loading = false });
 }
+
+async function getNYTInfo(marker, loading) {
+    var urlNyt = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+
+    var params = {
+        'api-key': "843ec920599e452fa83ab934c7ebb0f6",
+        'q': marker.title
+    };
+
+    var response = await axios.get(urlNyt,{
+        params: {
+            params
+        }
+      }); 
+
+    // $.getJSON(urlNyt, params, function (data) {
+    //     $nytHeaderElem.text("New York Times Articles About " + city);
+    //     var docs = data.response.docs;
+    //     var length = docs.length;
+    //     for (var index = 0; index < length; index++) {
+    //         var doc = docs[index];
+    //         $nytElem.append('<li class="article">' +
+    //             '<a href="' + doc.web_url + '">' + doc.headline.main + '</a>' +
+    //             '<p>' + doc.snippet + '</p>' +
+    //             '</li>');
+    //     }
+    // }).error(function () {
+    //     $greeting.text("An error occured during your Ajax call !!!!");
+    // });
+}
+
+async function getWikipediaInfo(marker, loading) {
+    try {
+        var urlWikipdedia = "https://en.wikipedia.org/w/api.php";
+
+        var response = await axios.get(urlWikipdedia,)
+    
+        var paramsWikipedia = {
+            'action': 'opensearch',
+            'search': 'paris',
+            'format': 'json',
+        };
+    
+        // $.ajax({
+        //     dataType: "jsonp",
+        //     url: urlWikipdedia,
+        //     data: paramsWikipedia,
+        //     success: function (data) {
+        //         var articles = data[1];
+        //         var artilcesLinks = data[3];
+        //         var length = articles.length;
+        //         for (var index = 0; index < length; index++) {
+        //             $wikiElem.append('<li><a href="' + artilcesLinks[index] + '">' + articles[index] + '</a></li>');
+        //         }
+        //     }
+        // }).error(function () {
+        //     $greeting.text("An error occured during your Ajax call !!!!");
+        // });
+    } catch (error) {
+        window.alert("An error occured while processing your call"); 
+    }
+
+}
+
+function initMakerInfoModel() {
+    this.loading = ko.observable(true),
+        this.testValue = ko.observable('mon test')
+    this.yelpInfo = ko.observableArray([])
+};
+
+
 document.addEventListener("DOMContentLoaded", function (event) {
     model = new initMyNeighborhoodModel("My Neighborhood View", markersInit);
     ko.applyBindings(model);
