@@ -84,7 +84,7 @@ let markersInit = [{
         self.loading = true;
         content =  await  builtInitialContentInfo(currentMarker); 
         let infowindow = new google.maps.InfoWindow({
-          content:currentMarker.content
+          content:content
         });
         infowindow.open(map, currentMarker.marker);
     }
