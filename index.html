@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
         crossorigin="anonymous">
     <link rel="stylesheet" href="css/site.css">
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
     <style type="text/css">
         html,
         body {
@@ -54,7 +54,7 @@
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous">
-    </script>
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
@@ -65,26 +65,6 @@
     <div class="repeating-form-section">
         <h2 data-bind="text: testValue"></h2>
     </div>
-</script>
-<script type="text/template" id="repeating-yelp-element">
-    <div class="repeating-form-section">
-            <div data-bind="if: loading">
-                <i class="fas fa-spinner fa-spin"></i>
-            </div>
-            <div data-bind="ifnot: displayMessage">
-                    <h1>name</h1>
-                    <img src="https://s3-media3.fl.yelpcdn.com/bphoto/7wfpjg4sEvu6xifxcPsBXg/o.jpg" class="img-responsive rounded float-left" alt="" style="
-                      height:60px;">
-                    <div class="d-flex flex-column">
-                      <p class="">is_closed</p>
-                      <p class="">display</p>
-                      <p class="">review_count</p>
-                      <p class="">categories</p>
-                      <p class="">ratings</p>
-                      <p class="">prices </p>
-                    </div>
-                  </div>  
-            </div>     
 </script>
 
 </html>
