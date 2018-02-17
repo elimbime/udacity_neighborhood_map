@@ -7,7 +7,6 @@ let markersInit = [{
         },
         title: "AntiCafe Beaubourg",
         marker: undefined,
-        fourSquareInfo: undefined, 
         imagePath: undefined, 
     },
     {
@@ -17,7 +16,6 @@ let markersInit = [{
         },
         title: 'Workshop Paris',
         marker: undefined,
-        fourSquareInfo: undefined,
         imagePath: undefined, 
     },
     {
@@ -27,7 +25,6 @@ let markersInit = [{
         },
         title: 'Station f',
         marker: undefined,
-        fourSquareInfo: undefined, 
         imagePath: undefined, 
     },
 ];
@@ -95,39 +92,44 @@ function buildImagePath(marker) {
 }
 
 async function builtInitialContentInfo(currentMarker){
-    let clientId = 'MDCJT2VQPZC3IVRIZ3ZISTEASIC01BP5RXBCEM2WYX3LTTCV';
-    let clientSecret = '5QDNTC5C0LHK10P0HIWP5HX4QF3USDKB2K0M0T4NYAP2XTUC';
-    let url = 'https://api.foursquare.com/v2/venues/search?ll=' + currentMarker.position.lat + ',' + currentMarker.position.lng + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + currentMarker.title;
+    try {
+        let clientId = 'MDCJT2VQPZC3IVRIZ3ZISTEASIC01BP5RXBCEM2WYX3LTTCV';
+        let clientSecret = '5QDNTC5C0LHK10P0HIWP5HX4QF3USDKB2K0M0T4NYAP2XTUC';
+        let url = 'https://api.foursquare.com/v2/venues/search?ll=' + currentMarker.position.lat + ',' + currentMarker.position.lng + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + currentMarker.title;
+    
+        let fourSquareCall = await axios.get(url); 
+    
+        let self = this;
+        this.name = "";
+        this.URL = "";
+        this.address = "";
+        this.city = "";
+        this.phone = "";
+    
+        let venue = fourSquareCall.data.response.venues[0];
+        self.name = venue.name;
+        self.URL = venue.url;
+        self.address = venue.location.address;
+        self.city = venue.location.city;
+        self.phone = venue.contact.formattedPhone;
+        currentMarker.fourSquareInfo = self;
+    
+        let content = '<div id=marker_' + currentMarker.title + '>';
+        content = content.concat('<h5>' + currentMarker.title + '</h5>');
+        content = content.concat('<img src="' + currentMarker.imagePath + '" class="img-responsive rounded" alt="" style="height:60px;">');
+        content = content.concat('<h6>Foursquare Info</h6>');
+        content = content.concat(' <p class="font-weight-normal">Adress: ' + currentMarker.fourSquareInfo.address + '</p>');
+        content = content.concat(' <p class="font-weight-normal">City: ' + currentMarker.fourSquareInfo.city + '</p>');
+        content = content.concat(' <p class="font-weight-normal">Website: <a href="'+ currentMarker.fourSquareInfo.URL +'">'+ currentMarker.fourSquareInfo.URL+'</a></p>');
+        content = content.concat(' <p class="font-weight-normal">Phone: ' + currentMarker.fourSquareInfo.phone + '</p>');
+        content = content.concat('</br>');
+        content = content.concat('</div>');
+    
+        return content;
+    } catch (error) {
+        window.alert('An error occured while getting data from the Foursquare.'); 
+    }
 
-    let fourSquareCall = await axios.get(url); 
-
-    let self = this;
-    this.name = "";
-    this.URL = "";
-    this.address = "";
-    this.city = "";
-    this.phone = "";
-
-    let venue = fourSquareCall.data.response.venues[0];
-    self.name = venue.name;
-    self.URL = venue.url;
-    self.address = venue.location.address;
-    self.city = venue.location.city;
-    self.phone = venue.contact.formattedPhone;
-    currentMarker.fourSquareInfo = self;
-
-    let content = '<div id=marker_' + currentMarker.title + '>';
-    content = content.concat('<h5>' + currentMarker.title + '</h5>');
-    content = content.concat('<img src="' + currentMarker.imagePath + '" class="img-responsive rounded" alt="" style="height:60px;">');
-    content = content.concat('<h6>Foursquare Info</h6>');
-    content = content.concat(' <p class="font-weight-normal">Adress: ' + currentMarker.fourSquareInfo.address + '</p>');
-    content = content.concat(' <p class="font-weight-normal">City: ' + currentMarker.fourSquareInfo.city + '</p>');
-    content = content.concat(' <p class="font-weight-normal">Website: ' + currentMarker.fourSquareInfo.URL + '</p>');
-    content = content.concat(' <p class="font-weight-normal">Phone: ' + currentMarker.fourSquareInfo.phone + '</p>');
-    content = content.concat('</br>');
-    content = content.concat('</div>');
-
-    return content;
 }
 
 function initMakerInfoModel() {
