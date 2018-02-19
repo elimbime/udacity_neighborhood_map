@@ -27,11 +27,36 @@ let markersInit = [{
         marker: undefined,
         imagePath: undefined, 
     },
+    {
+        position: {
+            lat: 48.8657641,
+            lng: 2.336677399999985
+        },
+        title: 'H.A.N.D.',
+        marker: undefined,
+        imagePath: undefined, 
+    },
+    {
+        position: {
+            lat: 48.859741,
+            lng: 2.3464725000000044
+        },
+        title: 'Chez Gladine',
+        marker: undefined,
+        imagePath: undefined, 
+    },
+    {
+        position: {
+            lat: 48.869235,
+            lng: 2.3324397
+        },
+        title: 'Sapporo',
+        marker: undefined,
+        imagePath: undefined, 
+    },
 ];
 
  function initMap() {
-    this.visible = ko.observable(true);
-
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: 48.864716,
@@ -49,14 +74,17 @@ let markersInit = [{
         mark.imagePath = buildImagePath(mark); 
         mark.marker = marker;
 
-        marker.addListener('click',async  function () {
+        marker.addListener('click',async function () {
             let content = await  builtInitialContentInfo(mark);
             let infowindow = new google.maps.InfoWindow({
                 content: content ,
             });
             infowindow.open(map, marker);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+                marker.setAnimation(null);
+           }, 2100);
         });
-
     });
 };
 
@@ -69,14 +97,12 @@ let markersInit = [{
     self.computedfiltered = ko.pureComputed(function () {
         let elts = [];
         if (self.filter().length > 0) {
-            elts = this.markers().filter(mk => mk.title.includes(this.filter()))
+            elts = this.markers().filter(mk => mk.title.includes(this.filter()));
         } else {
             elts = this.markers();
         }
         return elts;
     }, this),
-    self.loading = ko.observable(false),
-    self.yelpInfo = ko.observable([]),
     self.showMarker = async function (currentMarker, currentModel) {
         self.loading = true;
         content =  await  builtInitialContentInfo(currentMarker); 
@@ -84,11 +110,15 @@ let markersInit = [{
           content:content
         });
         infowindow.open(map, currentMarker.marker);
+        currentMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            currentMarker.marker.setAnimation(null);
+       }, 2100);
     }
 };
 
 function buildImagePath(marker) {
-    return 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=' + marker.position.lat + ',' + marker.position.lng + '&heading=151.78&pitch=-0.76&key=AIzaSyBMI1nd1IF3Taf08B116eG3nHyBMpir2hM'
+    return 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=' + marker.position.lat + ',' + marker.position.lng + '&heading=151.78&pitch=-0.76&key=AIzaSyBMI1nd1IF3Taf08B116eG3nHyBMpir2hM';
 }
 
 async function builtInitialContentInfo(currentMarker){
@@ -126,19 +156,23 @@ async function builtInitialContentInfo(currentMarker){
         content = content.concat('</div>');
     
         return content;
-    } catch (error) {
-        window.alert('An error occured while getting data from the Foursquare.'); 
-    }
 
+    } catch (error) {
+        showErrorMessage('Foursquare'); 
+    }
+}
+
+function showErrorMessage(apiName){
+    window.alert('An error occured while getting data from the '+apiName+'.'); 
 }
 
 function initMakerInfoModel() {
     this.loading = ko.observable(true),
-        this.testValue = ko.observable('mon test')
-    this.yelpInfo = ko.observableArray([])
+    this.testValue = ko.observable('mon test');
+    this.yelpInfo = ko.observableArray([]);
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    model = new initMyNeighborhoodModel("My Neighborhood View", markersInit);
+    model = new initMyNeighborhoodModel("Neighborhood App", markersInit);
     ko.applyBindings(model);
 });

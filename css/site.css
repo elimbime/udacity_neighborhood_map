@@ -1,3 +1,14 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100%;
+}
+
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -19,12 +30,12 @@
   grid-row: 2/5;
 }
 
-.title{
-  text-align: center; 
-  vertical-align: middle; 
+.title {
+  text-align: center;
+  vertical-align: middle;
 }
 
 .filter {
-  background-color: grey; 
+  background-color: grey;
   color: white;
 }
