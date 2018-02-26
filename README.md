@@ -13,8 +13,8 @@ The Neighborhood APP is composed of two main classes
 
 # Set-Up
 In order to launch the program on your computer: 
--Restore the dev dependencies with the commnand: npm install
--Launch the dev server with the command: npm run dev
+- Restore the dev dependencies with the commnand: npm install
+- Launch the dev server with the command: npm run dev
 
 
 
