@@ -96,10 +96,9 @@ function initMap() {
     });
 }
 
-function initMyNeighborhoodModel(appName, markers) {
+function initMyNeighborhoodModel(markers) {
     initMap();
     var self = this;
-    self.appName = ko.observable(appName),
         self.markers = ko.observableArray(markers),
         self.filter = ko.observable(""),
         self.testValue = ko.observable("Ma valeur de test"),
@@ -188,13 +187,8 @@ function showErrorMessage(apiName) {
     window.alert('An error occured while getting data from the ' + apiName + ' api.');
 }
 
-// document.addEventListener("DOMContentLoaded", function (event) {
-//     model = new initMyNeighborhoodModel("Neighborhood App", markersInit);
-//     ko.applyBindings(model);
-// });
-
-function lol() {
+function mainInit() {
     initMap();
-    model = new initMyNeighborhoodModel("Neighborhood App", markersInit);
+    model = new initMyNeighborhoodModel(markersInit);
     ko.applyBindings(model);
 }
