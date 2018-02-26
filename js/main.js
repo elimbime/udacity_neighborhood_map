@@ -69,7 +69,7 @@ function initMap() {
         let marker = new google.maps.Marker({
             position: latLng,
             title: mark.title,
-            map: map
+            map: map,
         });
         mark.imagePath = buildImagePath(mark);
         mark.marker = marker;
@@ -78,25 +78,26 @@ function initMap() {
             let clientId = 'MDCJT2VQPZC3IVRIZ3ZISTEASIC01BP5RXBCEM2WYX3LTTCV';
             let clientSecret = '5QDNTC5C0LHK10P0HIWP5HX4QF3USDKB2K0M0T4NYAP2XTUC';
             let url = 'https://api.foursquare.com/v2/venues/search?ll=' + mark.position.lat + ',' + mark.position.lng + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + mark.title;
-            let fourSquareCall =  $.getJSON(url)
-                                   .done(function(data){
-                                        let content = builtInitialContentInfo(data,mark);
-                                        let infowindow = new google.maps.InfoWindow({
-                                            content: content,
-                                        });
-                                        infowindow.open(map, marker);
-                                        marker.setAnimation(google.maps.Animation.BOUNCE);
-                                        setTimeout(function () {
-                                            marker.setAnimation(null);
-                                        }, 1000);
-                                   }).fail(function(){
-                                      showErrorMessage('Foursquare');
-                                   }); 
+            let fourSquareCall = $.getJSON(url)
+                .done(function (data) {
+                    let content = builtInitialContentInfo(data, mark);
+                    let infowindow = new google.maps.InfoWindow({
+                        content: content,
+                    });
+                    infowindow.open(map, marker);
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function () {
+                        marker.setAnimation(null);
+                    }, 1400);
+                }).fail(function () {
+                    showErrorMessage('Foursquare');
+                });
         });
     });
 }
 
 function initMyNeighborhoodModel(appName, markers) {
+    initMap();
     var self = this;
     self.appName = ko.observable(appName),
         self.markers = ko.observableArray(markers),
@@ -106,30 +107,44 @@ function initMyNeighborhoodModel(appName, markers) {
             let elts = [];
             if (self.filter().length > 0) {
                 elts = this.markers().filter(mk => mk.title.includes(this.filter()));
+
+                this.markers().forEach(element => {
+                    let res = elts.find(function (elt) {
+                        return elt.title == element.title;
+                    });
+                    if (res != undefined) {
+                        element.marker.setVisible(true);
+                    }
+                    else {
+                        element.marker.setVisible(false);
+                    }
+                });
             } else {
                 elts = this.markers();
+                this.markers().forEach(element => {  element.marker.setVisible(true);});
             }
+
             return elts;
         }, this),
         self.showMarker = function (currentMarker, currentModel) {
-            let mark = currentMarker; 
+            let mark = currentMarker;
             let clientId = 'MDCJT2VQPZC3IVRIZ3ZISTEASIC01BP5RXBCEM2WYX3LTTCV';
             let clientSecret = '5QDNTC5C0LHK10P0HIWP5HX4QF3USDKB2K0M0T4NYAP2XTUC';
             let url = 'https://api.foursquare.com/v2/venues/search?ll=' + mark.position.lat + ',' + mark.position.lng + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&v=20160118' + '&query=' + mark.title;
-            let fourSquareCall =  $.getJSON(url)
-                                   .done(function(data){
-                                        let content = builtInitialContentInfo(data,mark);
-                                        let infowindow = new google.maps.InfoWindow({
-                                            content: content,
-                                        });
-                                        infowindow.open(map, mark.marker);
-                                        mark.marker.setAnimation(google.maps.Animation.BOUNCE);
-                                        setTimeout(function () {
-                                            mark.marker.setAnimation(null);
-                                        }, 1000);
-                                   }).fail(function(){
-                                    showErrorMessage('Foursquare');
-                                 }); 
+            let fourSquareCall = $.getJSON(url)
+                .done(function (data) {
+                    let content = builtInitialContentInfo(data, mark);
+                    let infowindow = new google.maps.InfoWindow({
+                        content: content,
+                    });
+                    infowindow.open(map, mark.marker);
+                    mark.marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function () {
+                        mark.marker.setAnimation(null);
+                    }, 1400);
+                }).fail(function () {
+                    showErrorMessage('Foursquare');
+                });
         };
 }
 
@@ -138,35 +153,48 @@ function buildImagePath(marker) {
 }
 
 function builtInitialContentInfo(fourSquareCall, currentMarker) {
-        let self = this;
-        let venue = fourSquareCall.response.venues[0];
+    let self = this;
+    let venue = fourSquareCall.response.venues[0];
 
-        self.name = venue.name;
-        self.URL = venue.url;
-        self.address = venue.location.address;
-        self.city = venue.location.city;
-        self.phone = venue.contact.formattedPhone;
-        currentMarker.fourSquareInfo = self;
+    self.name = venue.name;
+    self.URL = venue.url || 'No website available'; 
+    self.address = venue.location.address;
+    self.city = venue.location.city;
+    self.phone = venue.contact.formattedPhone || 'No phone number available';
+    currentMarker.fourSquareInfo = self;
 
-        let content = '<div id=marker_' + currentMarker.title + '>';
-        content = content.concat('<h5>' + currentMarker.title + '</h5>');
-        content = content.concat('<img src="' + currentMarker.imagePath + '" class="img-responsive rounded" alt="" style="height:60px;">');
-        content = content.concat('<h6>Foursquare Info</h6>');
-        content = content.concat(' <p class="font-weight-normal">Adress: ' + currentMarker.fourSquareInfo.address + '</p>');
-        content = content.concat(' <p class="font-weight-normal">City: ' + currentMarker.fourSquareInfo.city + '</p>');
+    let content = '<div id=marker_' + currentMarker.title + '>';
+    content = content.concat('<h5>' + currentMarker.title + '</h5>');
+    content = content.concat('<img src="' + currentMarker.imagePath + '" class="img-responsive rounded" alt="" style="height:60px;">');
+    content = content.concat('<h6>Foursquare Info</h6>');
+    content = content.concat(' <p class="font-weight-normal">Adress: ' + currentMarker.fourSquareInfo.address + '</p>');
+    content = content.concat(' <p class="font-weight-normal">City: ' + currentMarker.fourSquareInfo.city + '</p>');
+    if(currentMarker.fourSquareInfo.URL=='No website available')
+    {
+        content = content.concat(' <p class="font-weight-normal">Website: ' + currentMarker.fourSquareInfo.URL + '</p>');
+    }
+    else
+    {
         content = content.concat(' <p class="font-weight-normal">Website: <a href="' + currentMarker.fourSquareInfo.URL + '">' + currentMarker.fourSquareInfo.URL + '</a></p>');
-        content = content.concat(' <p class="font-weight-normal">Phone: ' + currentMarker.fourSquareInfo.phone + '</p>');
-        content = content.concat('</br>');
-        content = content.concat('</div>');
+    }
+    content = content.concat(' <p class="font-weight-normal">Phone: ' + currentMarker.fourSquareInfo.phone + '</p>');
+    content = content.concat('</br>');
+    content = content.concat('</div>');
 
-        return content;
+    return content;
 }
 
 function showErrorMessage(apiName) {
     window.alert('An error occured while getting data from the ' + apiName + ' api.');
 }
 
-document.addEventListener("DOMContentLoaded", function (event) {
+// document.addEventListener("DOMContentLoaded", function (event) {
+//     model = new initMyNeighborhoodModel("Neighborhood App", markersInit);
+//     ko.applyBindings(model);
+// });
+
+function lol() {
+    initMap();
     model = new initMyNeighborhoodModel("Neighborhood App", markersInit);
     ko.applyBindings(model);
-});
+}
