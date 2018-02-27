@@ -111,7 +111,7 @@ function initMyNeighborhoodModel(markers) {
                     let res = elts.find(function (elt) {
                         return elt.title == element.title;
                     });
-                    if (res != undefined) {
+                    if (res !== undefined) {
                         element.marker.setVisible(true);
                     }
                     else {
